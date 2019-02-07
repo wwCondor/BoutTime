@@ -128,7 +128,6 @@ class ViewController: UIViewController {
     // Array with eventData for round needs to be emptied when this method is called
     @IBAction func nextRoundButton(_ sender: UIButton) {
         displayEvents()
-        // timeButton.isEnabled = false
     }
     
     // Needs to reset all game when button is clicked
