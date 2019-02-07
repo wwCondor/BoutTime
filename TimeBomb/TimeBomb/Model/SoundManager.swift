@@ -9,7 +9,7 @@ import UIKit
 import Foundation
 import AudioToolbox
 
-class PlayCorrectDingSound {
+class Soundmanager {
     
     static var gameSound: SystemSoundID = 0
     
@@ -22,12 +22,6 @@ class PlayCorrectDingSound {
     static func playGameCorrectDing() {
         AudioServicesPlaySystemSound(gameSound)
     }
-    
-}
-
-class PlayBuzzerSound {
-    
-    static var gameSound: SystemSoundID = 0
     
     static func loadGameIncorrectBuzz() {
         let path = Bundle.main.path(forResource: "IncorrectBuzz", ofType: "wav")

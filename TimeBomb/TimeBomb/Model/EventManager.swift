@@ -10,118 +10,80 @@ import Foundation
 import UIKit
 import GameKit
 
-// Custom type struct/classes
-
-// Need function to randomly populate events for each round
-// No events are mutlplied in same round of play
-
-// Event may be repated during game, although not inside round
-// A 60 second timer end autochecks events for correctness
-// Device shake pre-ends round and checks events for correctness
-
-
+struct Event {
+    let eventName: String
+    let eventDate: Int
+}
 
 class EventManager {
     
-    struct Events {
-        let eventName: String
-        let eventDate: Int
-    }
-    
     // this needs to hold at least 25 events, but 40+ recommended
-    //
-    // the eventDate holds date as integer value
     // These now hold some sample Events to test everything
-    
-    let eventOne = Events (eventName: "Birth of Jasper", eventDate: 19871030)
-    let eventTwo = Events (eventName: "Birth of Wouter", eventDate: 19840915)
-    let eventThree = Events (eventName: "Birth of Martijn", eventDate: 19810415)
-    let eventFour = Events (eventName: "Birth of Kim", eventDate: 19820518 )
-    let eventFive = Events (eventName: "Birth of Nika", eventDate: 20180501)
+    // Possible topics: Star Trek, Art History Periods/paintings, mountain ascends
+    let events = [
+        Event (eventName: "Birth of Jasper", eventDate: 19871030),
+        Event (eventName: "Birth of Wouter", eventDate: 19840915),
+        Event (eventName: "Birth of Martijn", eventDate: 19810415),
+        Event (eventName: "Birth of Kim", eventDate: 19820518 ),
+        Event (eventName: "Birth of Nika", eventDate: 20180501)
+    ]
     
     let eventsPerRound: Int = 4
-    
     let roundsPerGame: Int = 6
-    // var currentRound: Int = 0
     
     var roundsCompleted: Int = 0
     var roundsSortedCorrect: Int = 0
-    // var roundsSortedIncorrect: Int = 0
     
-    // All events combined
-    var eventsCombined = [Events]()
-    
-    // Initial array of Events for round
-    var eventsArrayForRound: [Events] = []
-    
-    // Array that holds event during round
-    // var temporaryEventsArrayForRound: [Events] = []
-    
-    init() {
-        self.eventsCombined = [eventOne, eventTwo, eventThree, eventFour, eventFive]
-    }
+    // This array holds the events for the round
+    var eventsArrayForRound: [Event] = []
     
     // This randomizes the order of events without generating duplicates per round
     // The Events are stored in eventsArrayForRound
     func eventArrayProvider(){
-        let randomEventArray = GKShuffledDistribution.init(lowestValue: 0, highestValue: eventsCombined.count - 1)
+        let randomEventArray = GKShuffledDistribution.init(lowestValue: 0, highestValue: events.count - 1)
         for _  in 1...eventsPerRound {
-            eventsArrayForRound.append(eventsCombined[randomEventArray.nextInt()])
+            eventsArrayForRound.append(events[randomEventArray.nextInt()])
             // print(eventsArrayForRound)
         }
     }
-    // At this point I have an array with 4 unique events
-    
-    // Theses methods provide the events for the four eventFields
-    // Find a way to combine these into one method -> DRY!
-    // Get rid of 'magic numbers'
-    /*
-    func provideEventForFields() -> [Events] {
-        eventArrayProvider()
-        let eventsReturned = [eventsArrayForRound[0], eventsArrayForRound[1], eventsArrayForRound[2], eventsArrayForRound[3]]
-        
-        return eventsReturned
-    }
- */
-    
-    func provideEventForFieldOne() -> Events {
-        eventArrayProvider()
-        let eventsReturned = eventsArrayForRound[0]
-        
-        return eventsReturned
-    }
-    
-    func provideEventForFieldTwo() -> Events {
-        eventArrayProvider()
-        let eventsReturned = eventsArrayForRound[1]
-        return eventsReturned
-    }
     
     
-    func provideEventForFieldThree() -> Events {
-        eventArrayProvider()
-        let eventsReturned = eventsArrayForRound[2]
-        return eventsReturned
+    func isOrderOfEventsCorrect() -> Bool {
+        // let viewController = ViewController.init()
+        // nextRoundButton.isHidden = false
+        var isCorrectOrder = false
+        if eventsArrayForRound[0].eventDate >
+            eventsArrayForRound[1].eventDate
+            &&
+            eventsArrayForRound[1].eventDate >
+            eventsArrayForRound[2].eventDate
+            &&
+            eventsArrayForRound[2].eventDate >
+            eventsArrayForRound[3].eventDate {
+            
+            // viewController.instructionsLabel.text = "Well done!"
+            roundsSortedCorrect += 1
+            Soundmanager.loadGameCorrectDing()
+            Soundmanager.playGameCorrectDing()
+            isCorrectOrder = true
+        } else {
+            // viewController.instructionsLabel.text = "Woops! Wrong Order"
+            Soundmanager.loadGameIncorrectBuzz()
+            Soundmanager.playGameIncorrectBuzz()
+        }
+        endRound()
+        // viewController.showNextRoundButtonOrDisplayScore()
+        return isCorrectOrder
     }
     
-    func provideEventForFieldFour() -> Events {
-        eventArrayProvider()
-        let eventsReturned = eventsArrayForRound[3]
-        return eventsReturned
-    }
-    /*
-    func swapEventOneAndTwo() {
-        eventsArrayForRound.swapAt(0, 1)
+    // MARK: - End Round
+    // When round ends show next round button
+    // Exceeds: Show ?-Buttons to call wiki Events
+    func endRound() {
+        roundsCompleted += 1
+        eventsArrayForRound.removeAll()
     }
     
-    func swapEventTwoAndThree() {
-        eventsArrayForRound.swapAt(1, 2)
-    }
-    
-    func swapEventsThreeAndFour() {
-        eventsArrayForRound.swapAt(2, 3)
-    }
- */
     
     // This empties the eventsArray when next round is started
     func emptyEventsArray() {
@@ -132,7 +94,6 @@ class EventManager {
     func resetGameData() {
         roundsCompleted = 0
         roundsSortedCorrect = 0
-        // roundsSortedIncorrect = 0
         eventsArrayForRound.removeAll()
     }
 
