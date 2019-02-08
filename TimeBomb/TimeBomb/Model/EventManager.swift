@@ -41,7 +41,7 @@ class EventManager {
         Event (eventName: "Final Fantasy", eventDate: 19871218),
         Event (eventName: "Super Mario Bros. 2", eventDate: 19881009),
         Event (eventName: "Super Mario Bros. 3", eventDate: 19881023),
-        Event (eventName: "Super Mari0 Land", eventDate: 19890421),
+        Event (eventName: "Super Mario Land", eventDate: 19890421),
         Event (eventName: "Teenage Mutant Ninja Turtles", eventDate: 19890512),
         Event (eventName: "Dr. Mario", eventDate: 19900727),
         Event (eventName: "Turtles: Fall of the Footclan", eventDate: 19900803),

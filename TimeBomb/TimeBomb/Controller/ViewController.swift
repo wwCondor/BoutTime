@@ -160,9 +160,9 @@ class ViewController: UIViewController {
     }
     
     func changeLabelText() {
-        let variable = eventManager.isOrderOfEventsCorrect()
+        let resultCheck = eventManager.isOrderOfEventsCorrect()
         
-        if variable == true {
+        if resultCheck == true {
             instructionsLabel.text = "Well done!"
         } else {
             instructionsLabel.text = "Woops! Wrong Order"
